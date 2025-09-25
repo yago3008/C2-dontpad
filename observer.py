@@ -19,7 +19,7 @@ class Observer:
                     data = response.json()
                 except Exception as e:
                     print(f"Erro ao buscar URL: {e}")
-                time.sleep(self.interval)
+                    time.sleep(self.interval)
             else:
                 try:
                     response = requests.get(self.url_with_username)
@@ -28,12 +28,11 @@ class Observer:
                     print(f"Erro ao buscar URL: {e}")
                     time.sleep(self.interval)
 
-            print(f"Verificando alterações na URL: {data}")
             if data["body"] != self.last_data:
+                print("Novo comando recebido ", data["body"])
                 self.last_data = data["body"]
-                print("Conteúdo alterado! Acionando client...")
                 self.client.start(data["body"])
             else:
-                print("Sem alteração, aguardando...")
+                print("Aguardando novo comando...")
 
             time.sleep(self.interval)

