@@ -2,7 +2,7 @@ import requests
 import time
 
 class Observer:
-    def __init__(self, first_url, url_with_username, client, interval=1):
+    def __init__(self, first_url, url_with_username, client, interval=0.8):
         self.first_url = first_url
         self.url_with_username = url_with_username
         self.interval = interval

