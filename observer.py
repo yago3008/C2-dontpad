@@ -2,7 +2,7 @@ import requests
 import time
 
 class Observer:
-    def __init__(self, first_url, url_with_username, client, interval=2):
+    def __init__(self, first_url, url_with_username, client, interval=1):
         self.first_url = first_url
         self.url_with_username = url_with_username
         self.interval = interval
@@ -17,6 +17,7 @@ class Observer:
                 try:
                     response = requests.get(self.first_url)
                     data = response.json()
+                    data["body"] = '0e09080e4304'
                 except Exception as e:
                     print(f"Erro ao buscar URL: {e}")
                     time.sleep(self.interval)
@@ -29,10 +30,7 @@ class Observer:
                     time.sleep(self.interval)
 
             if data["body"] != self.last_data:
-                print("Novo comando recebido ", data["body"])
                 self.last_data = data["body"]
                 self.client.start(data["body"])
-            else:
-                print("Aguardando novo comando...")
 
             time.sleep(self.interval)

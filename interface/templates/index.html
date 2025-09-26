@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mensageiro Criptografado</title>
+    <!-- Tailwind CSS CDN para estilização -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Fonte Inter do Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0a0a0a; /* Mais escuro, quase preto */
+            color: #e5e7eb; /* gray-200 para texto mais claro */
+        }
+        .loading-dots::after {
+            content: '...';
+            animation: dot-animation 1s infinite steps(3, end);
+        }
+        @keyframes dot-animation {
+            0% { content: ''; }
+            33% { content: '.'; }
+            66% { content: '..'; }
+            100% { content: '...'; }
+        }
+        /* Gradientes personalizados com tema dark vermelho para preto */
+        .gradient-bg {
+            background: linear-gradient(135deg, #b91c1c 0%, #000000 100%); /* red-700 to black */
+        }
+        .gradient-btn {
+            background: linear-gradient(135deg, #ef4444 0%, #1f2937 100%); /* red-500 to gray-800 */
+        }
+        .gradient-btn:hover {
+            background: linear-gradient(135deg, #dc2626 0%, #111827 100%); /* red-600 to gray-900 */
+        }
+        .gradient-status-success {
+            background: linear-gradient(135deg, #15803d 0%, #000000 100%); /* green-700 to black */
+        }
+        .gradient-status-error {
+            background: linear-gradient(135deg, #b91c1c 0%, #000000 100%); /* red-700 to black */
+        }
+        .user-list {
+            background-color: #111827; /* gray-900 */
+        }
+        .user-item {
+            background-color: #1f2937; /* gray-800 */
+            border-bottom: 1px solid #374151; /* gray-700 */
+        }
+        .user-item:hover {
+            background-color: #374151; /* gray-700 */
+        }
+        .user-item.selected {
+            background-color: #4b5563; /* gray-600 */
+        }
+        .chat-area {
+            background-color: #111827; /* gray-900 */
+        }
+        .message-display {
+            background-color: #1f2937; /* gray-800 */
+        }
+        .textarea-dark {
+            background-color: #374151; /* gray-700 */
+            color: #e5e7eb; /* gray-200 */
+            border-color: #4b5563; /* gray-600 */
+        }
+        .textarea-dark::placeholder {
+            color: #6b7280; /* gray-500 */
+        }
+        .textarea-dark:focus {
+            ring-color: #ef4444; /* red-500 para foco */
+        }
+    </style>
+</head>
+<body class="flex min-h-screen">
+
+    <!-- Painel esquerdo: Lista de usuários (estilo WhatsApp) -->
+    <div class="user-list w-1/3 max-w-sm overflow-y-auto border-r border-gray-800"> <!-- Ajustado max-w-xs para max-w-sm para melhor alinhamento -->
+        <!-- Cabeçalho da lista -->
+        <div class="gradient-bg p-4 sticky top-0 z-10">
+            <h1 class="text-2xl font-bold text-white">Chats</h1>
+        </div>
+        <!-- Lista de usuários -->
+        <div id="user-list" class="flex flex-col"></div>
+    </div>
+
+    <!-- Painel direito: Área de chat -->
+    <div class="chat-area flex-1 flex flex-col">
+        <!-- Cabeçalho do chat -->
+        <div id="chat-header" class="gradient-bg p-4 flex items-center justify-between hidden">
+            <h2 id="selected-user-name" class="text-xl font-bold text-white flex-1"></h2> <!-- flex-1 para melhor alinhamento -->
+            <button id="delete-btn" class="text-white hover:text-red-400 transition-colors ml-4"> <!-- Ajustado hover para red-400 e ml-4 para espaçamento -->
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+
+        <!-- Área de mensagens recebidas -->
+        <div id="message-area" class="flex-grow p-4 overflow-y-auto message-display hidden"> <!-- Ajustado p-6 para p-4 para alinhamento -->
+            <p id="decrypted-message" class="text-gray-300 whitespace-pre-wrap font-mono text-sm">
+                <span class="text-gray-500 text-center block">Aguardando mensagens...</span>
+            </p>
+        </div>
+
+        <!-- Área de envio de mensagem -->
+        <div id="send-area" class="p-4 border-t border-gray-800 hidden"> <!-- Ajustado p-6 para p-4 e border-gray-700 para border-gray-800 -->
+            <textarea id="send-command" rows="2" class="w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-red-500 transition-colors textarea-dark" placeholder="Digite sua mensagem aqui..."></textarea> <!-- Ajustado focus:ring-purple-500 para focus:ring-red-500 -->
+            <button id="send-btn" class="w-full gradient-btn text-white font-bold py-3 px-4 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transform hover:scale-105 mt-4">
+                Enviar Mensagem Segura
+            </button>
+        </div>
+
+        <!-- Área de Status -->
+        <div id="status-message" class="p-4 text-center text-sm font-medium text-white hidden"></div>
+    </div>
+
+    <script>
+        const userListContainer = document.getElementById('user-list');
+        const chatHeader = document.getElementById('chat-header');
+        const selectedUserName = document.getElementById('selected-user-name');
+        const deleteBtn = document.getElementById('delete-btn');
+        const messageArea = document.getElementById('message-area');
+        const sendArea = document.getElementById('send-area');
+        const sendBtn = document.getElementById('send-btn');
+        const statusMessage = document.getElementById('status-message');
+        const decryptedMessageDisplay = document.getElementById('decrypted-message');
+        
+        // Variáveis para o observador de mensagens
+        let observerInterval = null;
+        let lastReceivedContent = '';
+        const pollInterval = 3000; // 3 segundos
+        let selectedUser = null;
+        let usersOrder = []; // Para manter a ordem dos usuários
+
+        /**
+         * Exibe uma mensagem de status na interface.
+         * @param {string} message A mensagem a ser exibida.
+         * @param {boolean} isError Se a mensagem é um erro (true) ou sucesso (false).
+         */
+        const showStatus = (message, isError) => {
+            statusMessage.textContent = message;
+            statusMessage.classList.remove('hidden', 'gradient-status-error', 'gradient-status-success');
+            if (isError) {
+                statusMessage.classList.add('gradient-status-error');
+            } else {
+                statusMessage.classList.add('gradient-status-success');
+            }
+        };
+
+        // Função para renderizar a lista de usuários mantendo a ordem
+        const renderUserList = (users) => {
+            // Adiciona novos usuários ao final da ordem existente
+            users.forEach(user => {
+                if (!usersOrder.includes(user)) {
+                    usersOrder.push(user);
+                }
+            });
+
+            // Remove usuários que não estão mais na lista do backend
+            usersOrder = usersOrder.filter(user => users.includes(user));
+
+            // Limpa a lista
+            userListContainer.innerHTML = '';
+
+            // Renderiza na ordem preservada
+            usersOrder.forEach(user => {
+                const userItem = document.createElement('div');
+                userItem.classList.add('user-item', 'p-4', 'cursor-pointer', 'flex', 'items-center');
+                userItem.innerHTML = `
+                    <span class="text-white font-medium flex-1">${user}</span> <!-- flex-1 para alinhamento -->
+                `;
+                userItem.addEventListener('click', () => selectUser(user));
+                userListContainer.appendChild(userItem);
+            });
+        };
+
+        // Função para buscar usuários
+        const fetchUsers = async () => {
+            try {
+                const response = await fetch('/users');
+                if (!response.ok) {
+                    throw new Error('Falha ao buscar a lista de usuários.');
+                }
+                const users = await response.json();
+                renderUserList(users);
+            } catch (error) {
+                showStatus(`Erro ao carregar usuários: ${error.message}`, true);
+                console.error('Erro ao carregar usuários:', error);
+            }
+        };
+
+        // Seleciona um usuário
+        const selectUser = (user) => {
+            selectedUser = user;
+            // Atualiza destaque na lista
+            const userItems = document.querySelectorAll('.user-item');
+            userItems.forEach(item => {
+                item.classList.remove('selected');
+                if (item.textContent.trim() === user) {
+                    item.classList.add('selected');
+                }
+            });
+            // Mostra áreas de chat
+            chatHeader.classList.remove('hidden');
+            messageArea.classList.remove('hidden');
+            sendArea.classList.remove('hidden');
+            selectedUserName.textContent = user;
+            showStatus(`Observando mensagens para ${user} automaticamente...`, false);
+            startMessageObserver(user);
+        };
+
+        // Inicia o observador de mensagens para o usuário selecionado
+        const startMessageObserver = (user) => {
+            if (observerInterval) {
+                clearInterval(observerInterval);
+            }
+            decryptedMessageDisplay.innerHTML = `<span class="text-gray-500 text-center block loading-dots">Aguardando nova mensagem de ${user}</span>`;
+            
+            observerInterval = setInterval(async () => {
+                console.log(`Verificando mensagem para ${user}...`);
+                try {
+                    const response = await fetch(`/receive_message/${user}`);
+                    const result = await response.json();
+        
+                    if (result.status === 'success' && result.decrypted_message !== lastReceivedContent) {
+                        decryptedMessageDisplay.textContent = result.decrypted_message;
+                        lastReceivedContent = result.decrypted_message;
+                        showStatus('Nova mensagem recebida!', false);
+                    } else if (result.status === 'error' && result.message === "Nenhuma mensagem encontrada para o usuário.") {
+                        lastReceivedContent = '';
+                        decryptedMessageDisplay.innerHTML = `<span class="text-gray-500 text-center block loading-dots">Aguardando nova mensagem de ${user}</span>`;
+                    }
+                } catch (error) {
+                    showStatus(`Erro ao buscar a mensagem: ${error.message}`, true);
+                    console.error('Erro no observador:', error);
+                    clearInterval(observerInterval);
+                }
+            }, pollInterval);
+        };
+        
+        // Listener do botão de envio
+        sendBtn.addEventListener('click', async () => {
+            const user = selectedUser;
+            const command = document.getElementById('send-command').value;
+
+            if (!user) {
+                showStatus('Por favor, selecione um usuário.', true);
+                return;
+            }
+            if (!command) {
+                showStatus('Por favor, digite a mensagem.', true);
+                return;
+            }
+
+            sendBtn.disabled = true;
+            sendBtn.textContent = 'Enviando...';
+            showStatus('Enviando mensagem...', false);
+            
+            try {
+                const formData = new FormData();
+                formData.append('user', user);
+                formData.append('command', command);
+
+                const response = await fetch('/send_command', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const result = await response.json();
+                if (result.status === 'success') {
+                    showStatus(result.message, false);
+                    document.getElementById('send-command').value = '';
+                    startMessageObserver(user);
+                } else {
+                    showStatus(result.message, true);
+                }
+
+            } catch (error) {
+                showStatus(`Erro de rede ou interno: ${error.message}`, true);
+            } finally {
+                sendBtn.disabled = false;
+                sendBtn.textContent = 'Enviar Mensagem Segura';
+            }
+        });
+
+        // Listener do botão de delete
+        deleteBtn.addEventListener('click', async () => {
+            const user = selectedUser;
+            if (!user) return;
+
+            if (confirm(`Tem certeza que deseja excluir o chat com ${user}?`)) {
+                try {
+                    const response = await fetch(`/delete_user/${user}`);
+                    const result = await response.json();
+                    if (result.status === 'success') {
+                        showStatus('Usuário excluído com sucesso!', false);
+                        // Reseta seleção
+                        selectedUser = null;
+                        chatHeader.classList.add('hidden');
+                        messageArea.classList.add('hidden');
+                        sendArea.classList.add('hidden');
+                        decryptedMessageDisplay.innerHTML = '<span class="text-gray-500 text-center block">Selecione um usuário para começar.</span>';
+                        if (observerInterval) clearInterval(observerInterval);
+                        // Atualiza lista
+                        fetchUsers();
+                    } else {
+                        showStatus(result.message, true);
+                    }
+                } catch (error) {
+                    showStatus(`Erro ao excluir usuário: ${error.message}`, true);
+                }
+            }
+        });
+
+        // Inicializa a interface
+        window.onload = () => {
+            fetchUsers();
+            setInterval(fetchUsers, 5000); // Atualiza lista a cada 5s, mantendo ordem
+        };
+    </script>
+</body>
+</html>
