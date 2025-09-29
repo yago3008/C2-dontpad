@@ -5,6 +5,7 @@ from flask import Flask, request, jsonify, render_template
 import requests
 import sys
 from flask_cors import CORS
+import urllib.parse
 
 parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 sys.path.insert(0, parent_dir)
@@ -128,6 +129,8 @@ def delete_user(username):
         response = requests.get(USERS_URL)
         if response.status_code == 200:
             users = response.json()
+            username = urllib.parse.quote(username)
+            print(users, username)
             if username in users:
                 if perform_user_deletion(username):
                     return jsonify({"status": "success", "message": f"Usuário {username} deletado com sucesso."}), 200
@@ -137,16 +140,16 @@ def delete_user(username):
 
 def perform_user_deletion(username):
     data = {
-    "text": Criptographer.encrypt('', username),
-    "lastModified": int(time.time() * 1000),
-    "force": "true",
-    "session-token": SESSION_TOKEN
+        "text": Criptographer.encrypt('', username),
+        "lastModified": int(time.time() * 1000),
+        "force": "true",
+        "session-token": SESSION_TOKEN
     }
     data_exit = {
-    "text": Criptographer.encrypt('exit', username),
-    "lastModified": int(time.time() * 1000),
-    "force": "true",
-    "session-token": SESSION_TOKEN
+        "text": Criptographer.encrypt('exit', username),
+        "lastModified": int(time.time() * 1000),
+        "force": "true",
+        "session-token": SESSION_TOKEN
     }
     requests.post(f"{DONTPAD_BASE_URL}/{username}/request", data=data_exit)
     time.sleep(2)

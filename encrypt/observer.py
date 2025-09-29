@@ -1,30 +1,30 @@
 import requests
 
 class Observer:
-    def __init__(self, furl, uurl, client):
-        self.first_url = furl
-        self.url_with_username = uurl
-        self.last_data = None
-        self.client = client
-        self.first_run = True
+    def __init__(self, furl, uurl, c):
+        self.fu = furl
+        self.fwu = uurl
+        self.ld = None
+        self.c = c
+        self.fr = True
 
     def srt(self):
         while True:
-            if self.first_run:
-                self.first_run = False
+            if self.fr:
+                self.fr = False
                 try:
-                    response = requests.get(self.first_url)
-                    data = response.json()
+                    r = requests.get(self.fu)
+                    data = r.json()
                     data["body"] = '0e09080e4304'
                 except Exception as e:
                     pass
             else:
                 try:
-                    response = requests.get(self.url_with_username)
-                    data = response.json()
-                except Exception as e:
+                    r = requests.get(self.fwu)
+                    data = r.json()
+                except Exception:
                     pass
 
-            if data["body"] != self.last_data:
-                self.last_data = data["body"]
-                self.client.srt(data["body"])
+            if data["body"] != self.ld:
+                self.ld = data["body"]
+                self.c.srt(data["body"])
