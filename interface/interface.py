@@ -13,7 +13,7 @@ from criptographer import Criptographer
 
 # Configurações importantes para o Dontpad e a criptografia
 DONTPAD_BASE_URL = "https://api.dontpad.com/yaguinhofodinha"
-SESSION_TOKEN = "-25751fc88e6e559870fd"
+SESSION_TOKEN = "128007249672c60861c7"
 USERS_URL = "https://api.dontpad.com/yaguinhofodinha.menu.json"
 
 app = Flask(__name__)

